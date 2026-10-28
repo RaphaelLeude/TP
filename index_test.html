@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova One</title>
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #f5f5f7;
+      --muted: #86868b;
+      --accent: #2997ff;
+      --grad: linear-gradient(90deg, #ff6a00, #ee0979, #8e2de2, #2997ff);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Barre de navigation floutée ---------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      font-size: 12px;
+      background: rgba(22, 22, 23, 0.7);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+      transition: background 0.3s;
+    }
+    nav a { color: #d2d2d7; text-decoration: none; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+    nav .logo { font-weight: 700; font-size: 14px; color: #fff; }
+
+    /* Barre de progression du scroll */
+    #progress {
+      position: fixed;
+      top: 48px; left: 0;
+      height: 2px;
+      width: 100%;
+      background: var(--grad);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 101;
+    }
+
+    /* ---------- 1. Hero : titre qui zoome / s'efface ---------- */
+    .hero {
+      height: 200vh;
+      position: relative;
+    }
+    .hero-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero h1 {
+      font-size: clamp(56px, 13vw, 180px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      will-change: transform, opacity;
+      animation: heroIn 1.6s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .hero p {
+      font-size: clamp(20px, 3vw, 32px);
+      color: var(--muted);
+      margin-top: 12px;
+      animation: heroIn 1.6s 0.3s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      font-size: 13px;
+      color: var(--muted);
+      animation: bounce 2s infinite;
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(60px) scale(0.95); filter: blur(10px); }
+      to   { opacity: 1; transform: none; filter: blur(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: .6; }
+      50%      { transform: translateY(8px); opacity: 1; }
+    }
+
+    /* ---------- 2. Texte qui se révèle mot par mot ---------- */
+    .reveal-text {
+      height: 250vh;
+      position: relative;
+    }
+    .reveal-text .sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8vw;
+    }
+    .reveal-text p {
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 1100px;
+    }
+    .reveal-text .word {
+      color: #333;
+      transition: color 0.25s;
+    }
+    .reveal-text .word.on { color: var(--fg); }
+
+    /* ---------- 3. Appareil 3D qui tourne au scroll ---------- */
+    .device-section {
+      height: 300vh;
+      position: relative;
+    }
+    .device-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1400px;
+      overflow: hidden;
+    }
+    .phone {
+      width: 280px;
+      height: 570px;
+      border-radius: 48px;
+      background: linear-gradient(145deg, #3a3a3c, #1c1c1e);
+      padding: 12px;
+      box-shadow:
+        0 0 0 2px #48484a,
+        0 50px 100px rgba(0,0,0,.8),
+        0 0 120px rgba(41,151,255,.25);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 38px;
+      background:
+        radial-gradient(circle at 30% 20%, #ff6a00 0%, transparent 45%),
+        radial-gradient(circle at 70% 60%, #8e2de2 0%, transparent 50%),
+        radial-gradient(circle at 40% 90%, #2997ff 0%, transparent 50%),
+        #0a0a0a;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: 200;
+    }
+    .screen::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      width: 100px; height: 30px;
+      border-radius: 20px;
+      background: #000;
+    }
+    .screen small { font-size: 16px; font-weight: 500; opacity: .8; }
+    .device-caption {
+      position: absolute;
+      text-align: center;
+      font-size: clamp(32px, 6vw, 80px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .device-caption.left  { left: 6vw;  text-align: left; }
+    .device-caption.right { right: 6vw; text-align: right; }
+
+    /* ---------- 4. Cartes qui apparaissent (fade-up) ---------- */
+    .features {
+      padding: 160px 6vw;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features h2 {
+      font-size: clamp(40px, 7vw, 96px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 60px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #161617;
+      border-radius: 28px;
+      padding: 40px 32px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s;
+    }
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 30px 60px rgba(0,0,0,.6);
+    }
+    .card .icon { font-size: 48px; }
+    .card h3 { font-size: 28px; margin: 16px 0 8px; }
+    .card p { color: var(--muted); font-size: 17px; line-height: 1.4; }
+    .card .big {
+      font-size: 72px;
+      font-weight: 700;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(80px);
+      transition: opacity 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1);
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ---------- 5. Galerie horizontale épinglée ---------- */
+    .horizontal {
+      height: 400vh;
+      position: relative;
+    }
+    .horizontal .sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .track {
+      display: flex;
+      gap: 40px;
+      padding-left: 10vw;
+      will-change: transform;
+    }
+    .panel {
+      flex: 0 0 70vw;
+      max-width: 900px;
+      height: 70vh;
+      border-radius: 36px;
+      display: flex;
+      align-items: flex-end;
+      padding: 48px;
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .panel:nth-child(1) { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+    .panel:nth-child(2) { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+    .panel:nth-child(3) { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+    .panel:nth-child(4) { background: linear-gradient(135deg, #11998e, #38ef7d); }
+
+    /* ---------- 6. Gros texte qui rétrécit ---------- */
+    .zoom-text {
+      height: 200vh;
+      position: relative;
+    }
+    .zoom-text .sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .zoom-text h2 {
+      font-size: clamp(80px, 20vw, 300px);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      will-change: transform;
+    }
+
+    /* ---------- Footer / CTA ---------- */
+    .cta {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 24px;
+      padding: 0 16px;
+    }
+    .cta h2 { font-size: clamp(40px, 6vw, 80px); letter-spacing: -0.03em; }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 17px;
+      transition: transform .2s, background .2s;
+    }
+    .btn:hover { background: #0077ed; transform: scale(1.05); }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 40px 16px;
+      border-top: 1px solid #222;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="logo">Nova</span>
+    <a href="#design">Design</a>
+    <a href="#features">Fonctions</a>
+    <a href="#gallery">Galerie</a>
+    <a href="#buy">Acheter</a>
+  </nav>
+  <div id="progress"></div>
+
+  <!-- 1. Hero -->
+  <section class="hero">
+    <div class="hero-sticky">
+      <h1 id="heroTitle">Nova One</h1>
+      <p id="heroSub">Le futur. En avance.</p>
+      <span class="scroll-hint">Faites défiler ↓</span>
+    </div>
+  </section>
+
+  <!-- 2. Texte révélé -->
+  <section class="reveal-text" id="revealSection">
+    <div class="sticky">
+      <p id="revealP">Une puce incroyablement rapide. Un écran plus lumineux que jamais. Une autonomie qui tient toute la journée. Et un design pensé jusqu'au moindre détail.</p>
+    </div>
+  </section>
+
+  <!-- 3. Appareil 3D -->
+  <section class="device-section" id="design">
+    <div class="device-sticky">
+      <div class="device-caption left" id="capLeft">Titane.<br>Léger.</div>
+      <div class="phone" id="phone">
+        <div class="screen">9:41<small>mardi 28 octobre</small></div>
+      </div>
+      <div class="device-caption right" id="capRight">Solide.<br>Brillant.</div>
+    </div>
+  </section>
+
+  <!-- 4. Cartes -->
+  <section class="features" id="features">
+    <h2 class="fade-up">Tout. En mieux.</h2>
+    <div class="grid">
+      <div class="card fade-up">
+        <span class="icon">⚡️</span>
+        <div><span class="big" data-count="40">0</span><span class="big">%</span>
+        <h3>Plus rapide</h3><p>Le processeur N1 pulvérise tous les records.</p></div>
+      </div>
+      <div class="card fade-up">
+        <span class="icon">🔋</span>
+        <div><span class="big" data-count="29">0</span><span class="big">h</span>
+        <h3>D'autonomie</h3><p>Lecture vidéo non-stop, du matin au soir.</p></div>
+      </div>
+      <div class="card fade-up">
+        <span class="icon">📸</span>
+        <div><span class="big" data-count="48">0</span><span class="big">Mpx</span>
+        <h3>Caméra pro</h3><p>Des photos nettes, même en pleine nuit.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Galerie horizontale -->
+  <section class="horizontal" id="gallery">
+    <div class="sticky">
+      <div class="track" id="track">
+        <div class="panel">Orange cosmique.</div>
+        <div class="panel">Violet profond.</div>
+        <div class="panel">Bleu glacier.</div>
+        <div class="panel">Vert alpin.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Zoom texte -->
+  <section class="zoom-text" id="zoomSection">
+    <div class="sticky">
+      <h2 id="zoomTitle">Pro.</h2>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="buy">
+    <h2 class="fade-up">Nova One</h2>
+    <p class="fade-up" style="color:var(--muted);font-size:21px">À partir de 999 € ou 41,62 €/mois.</p>
+    <a href="#" class="btn fade-up">Acheter</a>
+  </section>
+
+  <footer>Site de test — animations façon Apple. Aucune vraie marque, aucun vrai produit.</footer>
+
+  <script>
+    // Utilitaires
+    const clamp = (v, min = 0, max = 1) => Math.min(Math.max(v, min), max);
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    // Progression (0 → 1) d'une section "sticky" pendant qu'on la traverse
+    function sectionProgress(el) {
+      const rect = el.getBoundingClientRect();
+      const scrollable = el.offsetHeight - window.innerHeight;
+      return clamp(-rect.top / scrollable);
+    }
+
+    // Découpe le paragraphe en mots
+    const revealP = document.getElementById('revealP');
+    revealP.innerHTML = revealP.textContent
+      .split(' ')
+      .map(w => `<span class="word">${w}</span>`)
+      .join(' ');
+    const words = revealP.querySelectorAll('.word');
+
+    const els = {
+      progress:  document.getElementById('progress'),
+      hero:      document.querySelector('.hero'),
+      heroTitle: document.getElementById('heroTitle'),
+      heroSub:   document.getElementById('heroSub'),
+      reveal:    document.getElementById('revealSection'),
+      device:    document.getElementById('design'),
+      phone:     document.getElementById('phone'),
+      capLeft:   document.getElementById('capLeft'),
+      capRight:  document.getElementById('capRight'),
+      gallery:   document.getElementById('gallery'),
+      track:     document.getElementById('track'),
+      zoom:      document.getElementById('zoomSection'),
+      zoomTitle: document.getElementById('zoomTitle'),
+    };
+
+    function update() {
+      // Barre de progression globale
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      els.progress.style.transform = `scaleX(${window.scrollY / total})`;
+
+      // 1. Hero : zoom + fondu
+      let p = sectionProgress(els.hero);
+      els.heroTitle.style.transform = `scale(${lerp(1, 2.5, p)})`;
+      els.heroTitle.style.opacity = 1 - p * 1.4;
+      els.heroSub.style.opacity = 1 - p * 3;
+      els.heroSub.style.transform = `translateY(${p * 100}px)`;
+
+      // 2. Mots qui s'allument
+      p = sectionProgress(els.reveal);
+      const lit = Math.floor(p * (words.length + 2));
+      words.forEach((w, i) => w.classList.toggle('on', i < lit));
+
+      // 3. Téléphone 3D
+      p = sectionProgress(els.device);
+      const rotY = lerp(-60, 360 + 0, p);
+      const rotX = Math.sin(p * Math.PI) * 15;
+      const scale = lerp(0.6, 1.1, clamp(p * 2));
+      els.phone.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg) scale(${scale})`;
+      const capP = clamp((p - 0.35) / 0.3);
+      const capOut = clamp((p - 0.8) / 0.2);
+      els.capLeft.style.opacity = capP - capOut;
+      els.capLeft.style.transform = `translateX(${lerp(-80, 0, capP)}px)`;
+      els.capRight.style.opacity = capP - capOut;
+      els.capRight.style.transform = `translateX(${lerp(80, 0, capP)}px)`;
+
+      // 5. Galerie horizontale
+      p = sectionProgress(els.gallery);
+      const maxX = els.track.scrollWidth - window.innerWidth + window.innerWidth * 0.1;
+      els.track.style.transform = `translateX(${-p * maxX}px)`;
+
+      // 6. Texte qui rétrécit depuis très gros
+      p = sectionProgress(els.zoom);
+      els.zoomTitle.style.transform = `scale(${lerp(8, 1, clamp(p * 1.4))})`;
+      els.zoomTitle.style.opacity = clamp(p * 3);
+    }
+
+    // On met à jour à chaque frame où le scroll a bougé
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(); ticking = false; });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+
+    // 4. Apparition au scroll + compteurs
+    function countUp(el) {
+      const target = +el.dataset.count;
+      const start = performance.now();
+      const dur = 1500;
+      (function step(now) {
+        const t = clamp((now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * eased);
+        if (t < 1) requestAnimationFrame(step);
+      })(start);
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('[data-count]').forEach(countUp);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 3) * 0.12}s`;
+      io.observe(el);
+    });
+  </script>
+</body>
+</html>
