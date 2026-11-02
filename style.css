@@ -118,6 +118,65 @@ nav li{
 
 
 /* ==========================================================
+   Formulaire newsletter
+   ========================================================== */
+#newsletter h2{
+    font-family: "Dosis", sans-serif;
+}
+
+#newsletter form{
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+}
+
+#newsletter .champ{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+#newsletter label{
+    margin-bottom: 5px;
+}
+
+#newsletter input,
+#newsletter select{
+    padding: 5px;
+    border: 2px solid grey;
+    outline: none;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+/* Champ correct : vert */
+#newsletter input:user-valid,
+#newsletter select:user-valid{
+    border-color: #13D393;
+}
+
+/* Champ incorrect : rouge */
+#newsletter input:user-invalid,
+#newsletter select:user-invalid{
+    border-color: #b20a37;
+}
+
+/* Champ focus : blanc (l'ombre permet de le voir sur le fond clair) */
+#newsletter input:focus,
+#newsletter select:focus{
+    border-color: #fff;
+    box-shadow: 0 0 0 2px black;
+}
+
+#newsletter button{
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+/* ==========================================================
    Pied de page
    ========================================================== */
 footer{
