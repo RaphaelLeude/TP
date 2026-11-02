@@ -1,0 +1,128 @@
+/* ==========================================================
+   Polices
+   ========================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+
+/* ==========================================================
+   Styles généraux (page, titres, textes)
+   ========================================================== */
+body{
+    background-color: #1899f0;
+    background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
+    width: 100%;
+    margin: 0%;
+}
+
+h1{
+    font-family: "Dosis", sans-serif;
+}
+
+section{
+    font-family: "Source Sans 3", sans-serif;
+}
+
+
+/* ==========================================================
+   En-tête (logo + navigation)
+   ========================================================== */
+header{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: black;
+    width: 100%;
+}
+
+header img{
+    width: 75px;
+    margin: auto;
+}
+
+header nav{
+    padding: 1%;
+}
+
+header ul{
+    color: white;
+    list-style: none;
+    display: flex;
+    text-transform: uppercase;
+}
+
+nav li{
+    margin: 0 15px;
+}
+
+
+/* ==========================================================
+   Conteneur principal
+   ========================================================== */
+#main-container{
+    background-color: whitesmoke;
+    width: 1024px;
+    margin: 20px auto;
+    padding: 2%;
+}
+
+
+
+/* ==========================================================
+   Bloc image + description (côte à côte)
+   ========================================================== */
+#imageDescription{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Image du cocktail avec la vignette "cocktail du mois" */
+#imgCocktail{
+    width: 45%;
+    position: relative;
+}
+
+#imgCocktail img:first-child{
+    width: 100%;
+}
+
+#imgCocktail img:last-child{
+    width: 80px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Texte de description à droite de l'image */
+.description{
+    width: 40%;
+    display: flex;
+}
+
+.description p{
+    margin-top: 0;
+}
+
+
+/* ==========================================================
+   Bloc ingrédients + recette (côte à côte)
+   ========================================================== */
+#recetteDescription{
+    display: flex;
+    justify-content: space-between;
+}
+
+#recetteDescription section{
+    width: 45%;
+}
+
+
+/* ==========================================================
+   Pied de page
+   ========================================================== */
+footer{
+    background-color: black;
+    width: 100%;
+    color: white;
+    text-align: center;
+}
